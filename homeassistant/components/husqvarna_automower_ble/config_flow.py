@@ -7,7 +7,6 @@ import random
 from typing import Any
 
 from automower_ble.mower import Mower
-from automower_ble.protocol import ResponseResult
 from bleak import BleakError
 from bleak_retry_connector import get_device
 import voluptuous as vol
@@ -170,14 +169,8 @@ class HusqvarnaAutomowerBleConfigFlow(ConfigFlow, domain=DOMAIN):
 
             response_result = await mower.connect(device)
 
-            if response_result is not ResponseResult.OK:
-                if (
-                    response_result is ResponseResult.INVALID_PIN
-                    or response_result is ResponseResult.NOT_ALLOWED
-                ):
-                    errors["base"] = "invalid_auth"
-                else:
-                    errors["base"] = "cannot_connect"
+            if not response_result:
+                errors["base"] = "cannot_connect"
 
                 if ble_flow:
                     return self.async_show_form(
@@ -257,12 +250,7 @@ class HusqvarnaAutomowerBleConfigFlow(ConfigFlow, domain=DOMAIN):
                 (channel_id, mower) = await self.connect_mower(device)
 
                 response_result = await mower.connect(device)
-                if (
-                    response_result is ResponseResult.INVALID_PIN
-                    or response_result is ResponseResult.NOT_ALLOWED
-                ):
-                    errors["base"] = "invalid_auth"
-                elif response_result is not ResponseResult.OK:
+                if not response_result:
                     errors["base"] = "cannot_connect"
                 else:
                     data = {

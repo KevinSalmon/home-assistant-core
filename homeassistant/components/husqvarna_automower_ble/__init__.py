@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from automower_ble.mower import Mower
-from automower_ble.protocol import ResponseResult
 from bleak import BleakError
 from bleak_retry_connector import close_stale_connections_by_address, get_device
 
@@ -19,8 +18,11 @@ from .coordinator import HusqvarnaCoordinator
 type HusqvarnaConfigEntry = ConfigEntry[HusqvarnaCoordinator]
 
 PLATFORMS = [
+    Platform.CALENDAR,
     Platform.LAWN_MOWER,
+    Platform.NUMBER,
     Platform.SENSOR,
+    Platform.SWITCH,
 ]
 
 
@@ -43,9 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: HusqvarnaConfigEntry) ->
             hass, address, connectable=True
         ) or await get_device(address)
         response_result = await mower.connect(device)
-        if response_result is ResponseResult.INVALID_PIN:
-            raise ConfigEntryAuthFailed(f"Unable to connect to device {address}")
-        if response_result is not ResponseResult.OK:
+        if not response_result:
             raise ConfigEntryNotReady(
                 f"Unable to connect to device {address} due to {response_result}"
             )
