@@ -1,6 +1,7 @@
 {
   "domain": "husqvarna_automower_ble",
   "name": "Husqvarna Automower BLE",
+  "version": "99.99.99",
   "bluetooth": [
     {
       "service_uuid": "98bd0001-0b0e-421a-84e5-ddbf75dc6de4",
@@ -12,5 +13,5 @@
   "dependencies": ["bluetooth_adapters"],
   "documentation": "https://www.home-assistant.io/integrations/husqvarna_automower_ble",
   "iot_class": "local_polling",
-  "requirements": ["automower-ble==0.2.7"]
+  "requirements": []
 }
