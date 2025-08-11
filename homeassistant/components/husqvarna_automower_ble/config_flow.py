@@ -202,6 +202,8 @@ class HusqvarnaAutomowerBleConfigFlow(ConfigFlow, domain=DOMAIN):
         except (TimeoutError, BleakError):
             return self.async_abort(reason="cannot_connect")
 
+        await mower.disconnect()
+
         return self.async_create_entry(
             title=title,
             data={
@@ -235,6 +237,8 @@ class HusqvarnaAutomowerBleConfigFlow(ConfigFlow, domain=DOMAIN):
                 (channel_id, mower) = await self.connect_mower(device)
 
                 response_result = await mower.connect(device)
+                await mower.disconnect()
+
                 if (
                     response_result is ResponseResult.INVALID_PIN
                     or response_result is ResponseResult.NOT_ALLOWED
