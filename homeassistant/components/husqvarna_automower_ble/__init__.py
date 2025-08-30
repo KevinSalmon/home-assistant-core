@@ -19,8 +19,11 @@ from .coordinator import HusqvarnaCoordinator
 type HusqvarnaConfigEntry = ConfigEntry[HusqvarnaCoordinator]
 
 PLATFORMS = [
+    Platform.CALENDAR,
     Platform.LAWN_MOWER,
+    Platform.NUMBER,
     Platform.SENSOR,
+    Platform.SWITCH,
 ]
 
 

@@ -50,3 +50,7 @@ class HusqvarnaAutomowerBleDescriptorEntity(HusqvarnaAutomowerBleEntity):
             f"{coordinator.address}_{coordinator.channel_id}_{description.key}"
         )
         self.entity_description = description
+
+    @property
+    def name(self):
+        return f"{self.entity_description.key}"
